@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Add New Event
+{% endblock %}
+
+{%block head%}
+    <link rel="stylesheet" href="static/style/add_new.css">
+{% endblock %}
+
+{% block main %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger" id="errors_in_form" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div id="input_table">
+        <form action="/new_event" method="post">
+            <div class="input-group input-group-lg">
+                <input id="project_name" type="text" class="form-control" name="project_name" placeholder="Project Name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+            </div>
+
+            <div id="one_line">
+                <div class="col list_i">
+                    <input type="text" name="catagory" class="form-control" placeholder="Catagory" aria-label="Catagory">
+                </div>
+                <div class="row mb-3 list_i">
+                    <label for="colFormLabel" class="col-sm-2 col-form-label">Starting Date</label>
+                    <div class="col-sm-10">
+                        <input name="starting_date" type="date" class="form-control" id="colFormLabel" placeholder="Launching Date">
+                    </div>
+                </div>
+                <div class="row mb-3 list_i">
+                    <label for="colFormLabel" class="col-sm-2 col-form-label">Ending Date</label>
+                    <div class="col-sm-10">
+                        <input name="ending_date" type="date" class="form-control" id="colFormLabel" placeholder="Ending Date">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <textarea class="form-control" name="description" placeholder="Describe New Event" aria-label="With textarea"></textarea>
+            </div>
+            <button id="submit" type="submit" name="description" class="btn btn-outline-success">Proceed</button>
+        </form>
+    </div>
+{% endblock %}

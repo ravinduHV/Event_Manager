@@ -1,0 +1,52 @@
+#title{
+    font-weight: 900;
+    text-align: center;
+    padding: 20px;
+}
+
+
+.container{
+    background-color: antiquewhite;
+}
+
+.p-3{
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card-body{
+    text-align: center;
+    background-color: aliceblue;
+    width: fit-content;
+}
+
+.description{
+    margin-top: 20px;
+    padding: 2px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#budget_b{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(22, 2, 53);
+}
+
+.budget{
+    margin-top: 30px;
+    padding: 20px;
+    width:fit-content ;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+#errors_in_form{
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+}

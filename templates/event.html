@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+{% block title %}
+    {{ project[0]["name"] }}
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="static/style/event.css">
+{% endblock %}
+
+{% block main %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger" id="errors_in_form" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <h1 id="title">{{project[0]["name"].title()}} <span class="badge bg-secondary">{{project[0]["id"]}}</span> <span class="badge bg-secondary">{{project[0]["catagory"].title()}}</span></h1>
+
+    <div class="details">
+        <div class="container overflow-hidden text-center">
+            <div class="row gx-5">
+                <div class="col">
+                <div class="p-3">Launching : {{ project[0]["starting_date"] }}</div>
+                </div>
+                <div class="col">
+                <div class="p-3">Ending: {{ project[0]["ending_date"] }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card description">
+            <div class="card-body">
+              {{project[0]["description"].title()}}
+            </div>
+        </div>
+        <div class="budget">
+            <!-- Expenditure Button trigger modal -->
+            <button type="button" id="budget_b" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Add Expenditure or Income
+            </button>
+    
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Item Cart</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="/event", method="POST">
+                            <div class="modal-body">
+                                <input type="hidden" name=id value='{{ project[0]["id"] }}'>
+
+                                <div class="form-floating" style="margin-bottom: 15px;">
+                                    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="income_expenditure">
+                                      <option value="1" selected>Income</option>
+                                      <option value="2">Expenditure</option>
+                                    </select>
+                                    <label for="floatingSelect">Income or Expenditure</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" list="catagory" class="form-control" id="floatingtype" placeholder="Type" name="type" autocomplete="off">
+                                    <label for="floatingtype">Catagory</label>
+                                    <datalist id="catagory">
+                                        {% for item in catagory %}
+                                            <option value={{ item }}></option>
+                                        {% endfor %}
+                                    </datalist>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingitem" placeholder="Item" name="item" autocomplete="off">
+                                    <label for="floatingitem">Input Item</label>
+                                </div>
+                                
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="0.01" class="form-control" id="floatingunits" placeholder="Item" name="units" autocomplete="off">
+                                    <label for="floatingunits">Units</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="number" step="0.01" class="form-control" id="floatingunit_price" placeholder="Item" name="unit_price" autocomplete="off">
+                                    <label for="floatingunit_price">Unit Price</label>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Save</button>
+                            </div
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<script>
+            const myModal = document.getElementById('budget_b')
+            const myInput = document.getElementById('staticBackdrop')
+    
+            myModal.addEventListener('shown.bs.modal', () => {
+            myInput.focus()
+            })
+        </script>-->    
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{%block head%}
+    <link rel="stylesheet" href="static/style/main.css">
+{% endblock %}
+
+{% block main %}
+    <h1 id="main_title">Event Manager</h1>
+    <div class="events_list">
+        {% for event in events %}
+            <div class="card list_item" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event["name"] }}</h5>
+                    <p class="card-text"> {{ event["description"] }}</p>
+                    <a href='/event?id={{ event["id"] }}' class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
