@@ -6,6 +6,8 @@ import random
 
 app = Flask(__name__)
 
+app.jinja_env.add_extension('jinja2.ext.do')
+
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -57,26 +59,53 @@ def new_event():
 def event():
     if request.method == "POST":
         id = request.form.get("id")
-        income_expenditure = request.form.get("income_expenditure") # return integer 1 or 2
+        income_expenditure = int(request.form.get("income_expenditure")) # return integer 1 or 2::::: try to do it else error can happen
         _type = request.form.get("type")
         item = request.form.get("item")
         units = request.form.get("units")
         unit_price = request.form.get("unit_price")
+        date = request.form.get("date")
 
-        if not id or not income_expenditure or not _type or not item or not unit_price:
+        if not id or not income_expenditure or not _type or not item or not unit_price or not date:
             flash("Mandatory fields should not be empty ")
             return redirect(("/event?id="+id))
 
         if income_expenditure == 1 and not units:
             units = 1 
-        ##update tables
+
+        #checks for data
+        try:
+            units = float(units)
+            unit_price = float(unit_price)
+        except:
+            flash("Units and Unit_price [DATA UNMATCH]")
+            return redirect(("/event?id="+id))
+        
+        #check for valied date by separating and check with regex
+
+        #update tables
+        if income_expenditure == 1:
+            db.execute("INSERT INTO budget_income (project_id, type, item, amount, units, date) VALUES(?, ?, ?, ?, ?, ?)", int(id), _type, item, unit_price, units, date)
+        elif income_expenditure == 2:
+            db.execute("INSERT INTO budget_expenditure (project_id, type, item, amount, units, date) VALUES(?, ?, ?, ?, ?, ?)", int(id), _type, item, unit_price, units, date)
+
 
         return redirect(("/event?id="+id)) 
     else:
         id = request.args
-        if not id:
+        if not id["id"]:
             return redirect("/")
         project = db.execute("SELECT * FROM events WHERE id=?", id["id"])
         income_catagory = db.execute("SELECT type FROM budget_income WHERE project_id=?", int(id["id"]))
         expenditure_catagory = db.execute("SELECT type FROM budget_expenditure WHERE project_id=?", int(id["id"]))
-        return render_template("event.html", project=project, catagory=(income_catagory+expenditure_catagory))
+
+        income_details = sorted(db.execute("SELECT * FROM budget_income WHERE project_id=?", int(id["id"]) ), key=lambda x: x["date"])
+        expenditure_details = sorted(db.execute("SELECT * FROM budget_expenditure WHERE project_id=?", int(id["id"]) ), key=lambda x: x["date"])
+        
+        catagory=[]
+        for _ in income_details:
+            catagory.append(_["type"])
+        for _ in expenditure_details:
+            catagory.append(_["type"])
+
+        return render_template("event.html", project=project, catagory=set(catagory), income=income_details, expenditure=expenditure_details)
