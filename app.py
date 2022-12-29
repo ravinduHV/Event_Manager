@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 
-app.jinja_env.add_extension('jinja2.ext.do')
+app.jinja_env.add_extension('jinja2.ext.do') #Check for this-- no longer will needed
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
