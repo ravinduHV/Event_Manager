@@ -9,6 +9,7 @@
     <body>
         <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
+              {% if session["user_id"] %}
               <a class="navbar-brand" href="/">DashBoard</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -16,11 +17,16 @@
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                   <a class="nav-link active" aria-current="page" href="/new_event">New Event</a>
-                  <a class="nav-link disabled" href="#">Stations</a>
-                  <a class="nav-link disabled" href="#">Pricing</a>
-                  <a class="nav-link disabled">Tracker</a>
+                  <a class="nav-link disabled" href="#">Profile</a>
+                  <a class="nav-link " href="/logout">Logout</a>
                 </div>
               </div>
+              {% else %}
+              <div class="navbar-nav">
+                  <a class="nav-link" href="/login">Login</a>
+                  <a class="nav-link" href="/register">Register</a>
+              </div>
+              {% endif %}    
             </div>
           </nav>
         {% block main %}{% endblock %}

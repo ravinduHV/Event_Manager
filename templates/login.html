@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    LOGIN
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="static/style/login.css">
+{% endblock %}
+
+{% block main %}
+    <div id="middle">
+        <form action="/login" method="POST">
+            <div class="input-group flex-nowrap input">
+                <input name="username_email" type="text" class="form-control" placeholder="Username or Email" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap input">
+                <input name="password" type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input">
+                <input class="btn btn-primary" type="submit" value="Login">
+            </div>
+        </form>
+    </div>
+{% endblock %}
+

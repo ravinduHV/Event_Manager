@@ -10,6 +10,7 @@ Home
 
 {% block main %}
     <h1 id="main_title">Event Manager</h1>
+    {% if events %}
     <div class="events_list">
         {% for event in events %}
             <div class="card list_item" style="width: 18rem;">
@@ -21,4 +22,5 @@ Home
             </div>
         {% endfor %}
     </div>
+    {% endif %}
 {% endblock %}

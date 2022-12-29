@@ -63,7 +63,7 @@
 }
 
 #income_col{
-    background-color: rgb(5, 75, 2);
+    background-color: rgb(220, 235, 219);
     padding-top: 10px;
     padding-bottom: 30px;
     padding-left: 2px;
@@ -71,7 +71,7 @@
 }
 
 #expend_col{
-    background-color: rgb(116, 3, 3);
+    background-color: rgb(243, 179, 179);
     padding-top: 10px;
     padding-bottom: 30px;
     padding-left: 2px;
@@ -80,11 +80,37 @@
 
 .listing_title{
     margin-top: 20px;
-    color: antiquewhite;
+    color: rgb(24, 19, 14);
 }
 
 .total{
     background-color: aliceblue;
-    font-size: medium;
+    text-align: right;
     font-weight: 500;
+    font-size: small;
+}
+
+#income_list {
+    font-size: smaller;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#income_list td, #income_list th {
+    border: 1px solid rgb(17, 5, 5);
+    padding: 1px;
+    text-align: right;
+}
+
+#income_list tr:nth-child(even){background-color: #f2f2f2;}
+
+#income_list tr:hover {background-color: #ddd;}
+
+#income_list th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #04AA6D;
+    color: white;
 }

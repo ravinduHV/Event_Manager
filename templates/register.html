@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    REGISTER
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="static/style/login.css">
+{% endblock %}
+
+{% block main %}
+    <div id="middle">
+        <form action="/register" method="POST">
+            <div class="input-group flex-nowrap input">
+                <input name="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap input">
+                <input name="email" type="email" class="form-control" placeholder="Email" aria-label="email" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap input">
+                <input name="password" type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap input">
+                <input name="c_password" type="password" class="form-control" placeholder="Confirm Password" aria-label="c_password" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input-group flex-nowrap input">
+                <input name="tp_no" type="text" class="form-control" placeholder="Contact No." aria-label="tp_no" aria-describedby="addon-wrapping">
+            </div>
+            <div class="input">
+                <input class="btn btn-primary" type="submit" value="Login">
+            </div>
+        </form>
+    </div>
+{% endblock %}
+

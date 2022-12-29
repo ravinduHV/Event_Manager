@@ -54,7 +54,7 @@
                         </div>
                         <form action="/event", method="POST">
                             <div class="modal-body">
-                                <input type="hidden" name=id value='{{ project[0]["id"] }}'>
+                                <input type="hidden" name="id" value='{{ project[0]["id"] }}'>
 
                                 <div class="form-floating" style="margin-bottom: 15px;">
                                     <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="income_expenditure">
@@ -96,91 +96,116 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Save</button>
-                            </div
+                                <button name="insert_form" type="submit" class="btn btn-secondary" data-bs-dismiss="modal" value="save">Save</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--<script>
-            const myModal = document.getElementById('budget_b')
-            const myInput = document.getElementById('staticBackdrop')
-    
-            myModal.addEventListener('shown.bs.modal', () => {
-            myInput.focus()
-            })
-        </script>-->    
+        </div>   
     </div>
 
     <div class="budget_listing">
         <div class="container text-center">
             <div class="row align-items-start">
+            {% if income %}
               <div class="col" id="income_col">
                 <h3 class="listing_title">Income</h3>
                 <br>
-                {% set total = [] %}
-                {% for line in income%}
-                    <div class="container text-center">
-                        <div class="row align-items-start" id="line">
-                        <div class="col-auto line_col">
-                            {{ line["date"] }}
-                        </div>
-                        <div class="col line_col">
-                            {{ line["type"] }}
-                        </div>
-                        <div class="col line_col">
-                            {{ line["item"] }}
-                        </div>
-                        <div class="col-auto line_col">
-                            {{ line["units"] }}
-                        </div>
-                        <div class="col line_col">
-                            {{ line["amount"] }}
-                        </div>
-                        </div>
-                        {% do total.append((line["units"] | float)*(line["amount"] | float)) %}
-                    </div>
-                {% endfor %}
-                <div class="container text-center">
-                    <div class="row align-items-start" id="line">
-                    <div class="col total"></div>
-                    <div class="col total"></div>
-                    <div class="col total"></div>
-                    <div class="col-auto total">Total</div>
-                    {% set Total = namespace(value=0) %}
-                    {% for num in total %}
-                            {% set Total.value = Total.value + num %}
-                    {% endfor %}
-                    <div class="col total" style="margin-left: 1px;">{{ '%0.2f'|format(Total.value|float) }}</div>
-                    </div>
-                </div>
-              </div>
-              <div class="col" id="expend_col">
+                <table id="income_list">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Catagory</th>
+                            <th>Description</th>
+                            <th>Units</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    {% set Total_i = namespace(value=0) %}
+                    <tbody>
+                        {% for line in income %}
+                        <tr>
+                            <td>{{line["date"]}}</td>
+                            <td>{{line["type"]}}</td>
+                            <td>{{line["item"]}}</td>
+                            <td>{{line["units"]}}</td>
+                            <td>{{'%0.2f'|format(line["amount"]|float)}}</td>
+                            <td>{{'%0.2f'|format( (line["amount"]|float)*(line["units"]|float) )}}</td>
+                            <td>
+                                <form action="/event", method="POST">
+                                    <input type="hidden" name="id" value='{{ project[0]["id"] }}'>
+                                    <input type="hidden" name="row_id" value='{{ line["id"] }}'>
+                                    <input type="hidden" name="db" value="income">
+                                    <button name="delete_row" value="delete" type="submit" class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">DEL</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% set Total_i.value = Total_i.value + ((line["amount"]|float)*(line["units"]|float)) %}
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total</td>
+                            <td>{{ ('%0.2f'|format(Total_i.value|float)) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+            {% if expenditure %}
+            <div class="col" id="expend_col">
                 <h3 class="listing_title">Expends</h3>
                 <br>
-                {% for line in expenditure%}
-                    <div class="container text-center">
-                        <div class="row align-items-start" id="line">
-                        <div class="col-auto line_col">
-                            {{ line["date"] }}
-                        </div>
-                        <div class="col line_col">
-                            {{ line["type"] }}
-                        </div>
-                        <div class="col line_col">
-                            {{ line["item"] }}
-                        </div>
-                        <div class="col-auto line_col">
-                            {{ line["units"] }}
-                        </div>
-                        <div class="col line_col">
-                            {{ line["amount"] }}
-                        </div>
-                        </div>
-                    </div>
-                {% endfor %}
-              </div>
+                <table id="income_list">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Catagory</th>
+                            <th>Description</th>
+                            <th>Units</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    {% set Total_e = namespace(value=0) %}
+                    <tbody>
+                        {% for line in expenditure %}
+                        <tr>
+                            <td>{{line["date"]}}</td>
+                            <td>{{line["type"]}}</td>
+                            <td>{{line["item"]}}</td>
+                            <td>{{line["units"]}}</td>
+                            <td>{{'%0.2f'|format(line["amount"]|float)}}</td>
+                            <td>{{'%0.2f'|format( (line["amount"]|float)*(line["units"]|float) )}}</td>
+                            <td>
+                                <form action="/event", method="POST">
+                                    <input type="hidden" name="id" value='{{ project[0]["id"] }}'>
+                                    <input type="hidden" name="row_id" value='{{ line["id"] }}'>
+                                    <input type="hidden" name="db" value="expenditure">
+                                    <button name="delete_row" value="delete" type="submit" class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">DEL</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% set Total_e.value = Total_e.value + ((line["amount"]|float)*(line["units"]|float)) %}
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total</td>
+                            <td>{{ ('%0.2f'|format(Total_e.value|float)) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
+                </div>
             </div>
         </div>
     </div>
