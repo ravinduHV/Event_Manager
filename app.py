@@ -4,13 +4,11 @@ from cs50 import SQL
 import random
 from helper import login_required
 from User import User
-
+from report_generator import generate_pdf_report
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
 app = Flask(__name__)
-
-app.jinja_env.add_extension('jinja2.ext.do')
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -70,8 +68,8 @@ def new_event():
 @login_required
 def event():
     if request.method == "POST":
-        if request.form.get("insert_form") == "save":
-            id = request.form.get("id")
+        id = request.form.get("id")
+        if request.form.get("button") == "save":
             income_expenditure = int(request.form.get("income_expenditure")) # return integer 1 or 2::::: try to do it else error can happen
             _type = request.form.get("type")
             item = request.form.get("item")
@@ -104,14 +102,26 @@ def event():
 
 
             return redirect(("/event?id="+id)) 
-        elif request.form.get("delete_row") == "delete":
-            id = request.form.get("id")
+        elif request.form.get("button") == "delete":
             row_id = request.form.get("row_id")
             _type = request.form.get("db")
             if _type == "income":
                 db.execute("DELETE FROM budget_income WHERE id=?", int(row_id))
             elif _type == "expenditure":
                 db.execute("DELETE FROM budget_expenditure WHERE id=?", int(row_id))
+            return redirect(("/event?id="+id))
+
+        elif request.form.get("button") == "generate_pdf":
+            try:
+                orientation = int(request.form.get("orientation"))
+                font_size = int(request.form.get("font-size"))
+            except:
+                orientation = None
+                font_size = None
+            lable = request.form.get("report_lable")
+
+            report = generate_pdf_report(lable, orientation, font_size)
+            report.budget_report(int(id))
             return redirect(("/event?id="+id))
     else:
         id = request.args
@@ -165,7 +175,6 @@ def register():
             db.execute("INSERT INTO users (user_name, email, hash, contact_no) VALUES(?, ?, ?, ?)", user.name, user.email, generate_password_hash(user.password), user.tp_no)
         except:
             raise
-            #return redirect("/register")
         id = db.execute("SELECT id FROM users WHERE user_name=?", user.name)
         print(id)
         session["user_id"] = id[0]
@@ -178,3 +187,24 @@ def register():
 def logout():
     session.clear()
     return redirect("/login")
+
+
+@app.route("/profile", methods=["POST", "GET"])
+@login_required
+def profile():
+    if request.method == "POST":
+        button = request.form.get("name")
+        project_id = request.form.get("id")
+        if button == "DEL":
+            db.execute("DELETE FROM events WHERE id=?", int(project_id))
+            db.execute("DELETE FROM budget_income WHERE project_id=?", int(project_id))
+            db.execute("DELETE FROM budget_expenditure WHERE project_id=?", int(project_id))
+        return redirect("/profile")
+    else:
+        user = db.execute("SELECT user_name, email, contact_no FROM users WHERE id=?", int(session["user_id"]))
+        catagories = db.execute("SELECT catagory FROM events WHERE user_id=?",int(session["user_id"]))
+        list_catagory = []
+        for line in catagories:
+            list_catagory.append(line["catagory"].title())
+        projects = db.execute("SELECT catagory, starting_date, ending_date, description, id, name FROM events WHERE user_id=?",session["user_id"])
+        return render_template("profile.html", catagories=sorted(set(list_catagory)), projects=projects, user=user)

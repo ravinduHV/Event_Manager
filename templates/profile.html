@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}
+    {{ user[0]["user_name"] }}
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="static/style/profile.css">
+{% endblock %}
+
+{% block main %}
+    <div class="details">
+        <div class="profile_pic">
+            <div id="image_holder">
+
+            </div>
+        </div>
+        <div class="user_name">
+            <h3>{{ user[0]["user_name"].title() }} | {{ user[0]["email"] }} | {{ user[0]["contact_no"] }}</h3>
+        </div>
+    </div>
+    {% for catagory in catagories %}
+    <div class="section">
+        {{ catagory }}
+    </div>
+    <div class="p_container">
+        {% for project in projects %}
+            {% if project["catagory"].title() == catagory %}
+                <div class="p_details">
+                    <div>
+                        <p">
+                            {{ project["name"] }}
+                        </p>
+                    </div>
+                    <form action="/profile" method="post">
+                        <input type="hidden" name="id" value='{{ project["id"] }}'> 
+                        <input class="btn btn-primary" name="name" type="submit" value="DEL">
+                    </form>
+                    <div class="submit" style="margin-top: 10px; margin-bottom: 10px;">
+                        <a href='/event?id={{ project["id"] }}' class="btn btn-primary">See More</a>
+                    </div>                   
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+{% endblock %}

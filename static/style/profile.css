@@ -1,0 +1,55 @@
+.section{
+    width: 95%;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: aliceblue;
+    margin-top: 5px;
+    font-size: larger;
+    font-weight: 900;
+    
+}
+.profile_pic{
+    background-color: rgba(197, 192, 192, 0.39);
+    padding: 20px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#image_holder{
+    background-color: rgb(1, 41, 41);
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.user_name{
+    padding: 10px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    height: auto;
+    width: 90%;
+    background-color: bisque;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.p_container{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+}
+
+.p_details{
+    text-align: center;
+    width: 220px;
+    height: 160px;
+    margin: 10px;
+    background-color: blanchedalmond;
+}
+

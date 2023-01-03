@@ -4,7 +4,6 @@ class User:
     def __init__(self, name, email, password, c_password, tp_no, query):
         self.query = query
         if not name or not email or not password or not c_password or not tp_no:
-            print("ssssss")
             raise ValueError
         try:
             self.name = name

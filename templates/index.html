@@ -13,13 +13,17 @@ Home
     {% if events %}
     <div class="events_list">
         {% for event in events %}
-            <div class="card list_item" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ event["name"] }}</h5>
-                    <p class="card-text"> {{ event["description"] }}</p>
-                    <a href='/event?id={{ event["id"] }}' class="btn btn-primary">Go somewhere</a>
-                </div>
+        <div id="project_card">
+            <div class="p_card-title">
+                {{ event["name"] }}
             </div>
+            <div class="p_description">
+                {{ event["description"] }}
+            </div>
+            <div class="submit">
+                <a href='/event?id={{ event["id"] }}' class="btn btn-primary">See More</a>
+            </div>
+        </div>
         {% endfor %}
     </div>
     {% endif %}

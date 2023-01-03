@@ -96,7 +96,7 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button name="insert_form" type="submit" class="btn btn-secondary" data-bs-dismiss="modal" value="save">Save</button>
+                                <button name="button" type="submit" class="btn btn-secondary" data-bs-dismiss="modal" value="save">Save</button>
                             </div>
                         </form>
                     </div>
@@ -139,7 +139,7 @@
                                     <input type="hidden" name="id" value='{{ project[0]["id"] }}'>
                                     <input type="hidden" name="row_id" value='{{ line["id"] }}'>
                                     <input type="hidden" name="db" value="income">
-                                    <button name="delete_row" value="delete" type="submit" class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">DEL</button>
+                                    <button name="button" value="delete" type="submit" class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">DEL</button>
                                 </form>
                             </td>
                         </tr>
@@ -209,4 +209,52 @@
             </div>
         </div>
     </div>
+    <div class="pdf-section">
+        <button type="button" id="PDF-data" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+            Genarate PDF
+        </button>
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">PDF Settings</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/event", method="POST">
+                        <div class="modal-body">
+
+                            <input type="hidden" name="id" value='{{ project[0]["id"] }}'>
+                            <div class="form-floating" style="margin-bottom: 15px;">
+                                <select class="form-select" id="floatingSelect1" aria-label="Floating label select example" name="orientation">
+                                <option value="1">Portrait</option>
+                                <option value="2" selected>Landscape</option>
+                                </select>
+                                <label for="floatingSelect1">Orientation</label>
+                            </div>
+        
+                            <div class="form-floating" style="margin-bottom: 15px;">
+                                <select class="form-select" id="floatingSelect2" aria-label="Floating label select example" name="font-size">
+                                <option value="1">8</option>
+                                <option value="2">9</option>
+                                <option value="3" selected>10</option>
+                                <option value="4">12</option>
+                                </select>
+                                <label for="floatingSelect2">Font Size</label>
+                            </div>
+        
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingitem" placeholder="Report Lable" name="report_lable" autocomplete="off">
+                                <label for="floatingitem">Report Lable</label>
+                            </div>
+                        <div class="modal-footer">
+                            <button name="button" type="submit" class="btn btn-secondary" data-bs-dismiss="modal" value="generate_pdf">Generate
+                                
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
