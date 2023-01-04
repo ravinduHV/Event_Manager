@@ -9,7 +9,7 @@ Home
 {% endblock %}
 
 {% block main %}
-    <h1 id="main_title">Event Manager</h1>
+    <h1 id="main_title">Report Generator</h1>
     {% if events %}
     <div class="events_list">
         {% for event in events %}
@@ -21,7 +21,7 @@ Home
                 {{ event["description"] }}
             </div>
             <div class="submit">
-                <a href='/event?id={{ event["id"] }}' class="btn btn-primary">See More</a>
+                <a href='/event?id={{ event["id"] }}&report=False' class="btn btn-primary">See More</a>
             </div>
         </div>
         {% endfor %}

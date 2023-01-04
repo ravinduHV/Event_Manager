@@ -6,6 +6,8 @@ from helper import login_required
 from User import User
 from report_generator import generate_pdf_report
 from werkzeug.security import check_password_hash, generate_password_hash
+import os
+import shutil
 
 
 app = Flask(__name__)
@@ -79,7 +81,7 @@ def event():
 
             if not id or not income_expenditure or not _type or not item or not unit_price or not date:
                 flash("Mandatory fields should not be empty ")
-                return redirect(("/event?id="+id))
+                return redirect(("/event?id="+id+"&report=False"))
 
             if income_expenditure == 1 and not units:
                 units = 1 
@@ -90,7 +92,7 @@ def event():
                 unit_price = float(unit_price)
             except:
                 flash("Units and Unit_price [DATA UNMATCH]")
-                return redirect(("/event?id="+id))
+                return redirect(("/event?id="+id+"?report=False"))
             
             #check for valied date by separating and check with regex
 
@@ -102,6 +104,7 @@ def event():
 
 
             return redirect(("/event?id="+id)) 
+        
         elif request.form.get("button") == "delete":
             row_id = request.form.get("row_id")
             _type = request.form.get("db")
@@ -109,35 +112,47 @@ def event():
                 db.execute("DELETE FROM budget_income WHERE id=?", int(row_id))
             elif _type == "expenditure":
                 db.execute("DELETE FROM budget_expenditure WHERE id=?", int(row_id))
-            return redirect(("/event?id="+id))
+            return redirect(("/event?id="+id+"&report=False"))
 
         elif request.form.get("button") == "generate_pdf":
             try:
                 orientation = int(request.form.get("orientation"))
                 font_size = int(request.form.get("font-size"))
+                paper_size = int(request.form.get("paper_size"))
             except:
+                paper_size = None
                 orientation = None
                 font_size = None
             lable = request.form.get("report_lable")
 
-            report = generate_pdf_report(lable, orientation, font_size)
+            report = generate_pdf_report(lable, orientation, font_size, paper_size)
             report.budget_report(int(id))
-            return redirect(("/event?id="+id))
+            name = db.execute("SELECT name FROM events WHERE id=?",id)
+            shutil.copyfile('report.pdf', f'static/reports/{name[0]["name"]}.pdf')
+            return redirect(("/event?id="+id+"&report=True"))
     else:
-        id = request.args
-        if not id["id"]:
+        _args = request.args
+        if not _args["id"]:
             return redirect("/")
-        project = db.execute("SELECT * FROM events WHERE id=?", id["id"])
-        income_details = sorted(db.execute("SELECT * FROM budget_income WHERE project_id=?", int(id["id"]) ), key=lambda x: x["date"])
-        expenditure_details = sorted(db.execute("SELECT * FROM budget_expenditure WHERE project_id=?", int(id["id"]) ), key=lambda x: x["date"])
+        if _args["report"]  == "False":
+            name = db.execute("SELECT name FROM events WHERE id=?",_args["id"])
+            try:
+                os.remove(f'static/reports/{name[0]["name"]}.pdf')
+                report = False
+            except:
+                pass
+        elif _args["report"] == "True":
+            report = True
+        project = db.execute("SELECT * FROM events WHERE id=?", _args["id"])
+        income_details = sorted(db.execute("SELECT * FROM budget_income WHERE project_id=?", int(_args["id"]) ), key=lambda x: x["date"])
+        expenditure_details = sorted(db.execute("SELECT * FROM budget_expenditure WHERE project_id=?", int(_args["id"]) ), key=lambda x: x["date"])
         
         catagory=[]
         for _ in income_details:
-            catagory.append(_["type"])
+            catagory.append(_["type"].lstrip().title())
         for _ in expenditure_details:
-            catagory.append(_["type"])
-
-        return render_template("event.html", project=project, catagory=set(catagory), income=income_details, expenditure=expenditure_details)
+            catagory.append(_["type"].lstrip().title())
+        return render_template("event.html", project=project, catagory=set(catagory), income=income_details, expenditure=expenditure_details, report=report)
 
 @app.route("/login", methods=["POST","GET"])
 def login():
