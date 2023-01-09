@@ -5,29 +5,41 @@
 {% endblock %}
 
 {% block head %}
+    <link rel="stylesheet" href="static/style/event.css">
     <link rel="stylesheet" href="static/style/login.css">
+    <script src="static/script/register.js"></script>
 {% endblock %}
 
+
 {% block main %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" id="errors_in_form" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div id="middle">
         <form action="/register" method="POST">
             <div class="input-group flex-nowrap input">
-                <input name="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+                <input name="username" id="username" autocomplete="off" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
             </div>
             <div class="input-group flex-nowrap input">
-                <input name="email" type="email" class="form-control" placeholder="Email" aria-label="email" aria-describedby="addon-wrapping">
+                <input name="email" autocomplete="off" id="email" type="email" class="form-control" placeholder="Email" aria-label="email" aria-describedby="addon-wrapping">
             </div>
             <div class="input-group flex-nowrap input">
-                <input name="password" type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="addon-wrapping">
+                <input name="password" id="password" type="password" autocomplete="off" class="form-control" placeholder="Password" aria-label="password" aria-describedby="addon-wrapping">
             </div>
             <div class="input-group flex-nowrap input">
-                <input name="c_password" type="password" class="form-control" placeholder="Confirm Password" aria-label="c_password" aria-describedby="addon-wrapping">
+                <input name="c_password" type="password" id="confirmation" autocomplete="off" class="form-control" placeholder="Confirm Password" aria-label="c_password" aria-describedby="addon-wrapping">
             </div>
             <div class="input-group flex-nowrap input">
-                <input name="tp_no" type="text" class="form-control" placeholder="Contact No." aria-label="tp_no" aria-describedby="addon-wrapping">
+                <input name="tp_no" type="text" id="tp_no" autocomplete="off" class="form-control" placeholder="Contact No." aria-label="tp_no" aria-describedby="addon-wrapping">
             </div>
             <div class="input">
-                <input class="btn btn-primary" type="submit" value="Login">
+                <input class="btn btn-primary" id="submit" type="submit" value="Login">
             </div>
         </form>
     </div>

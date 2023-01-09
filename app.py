@@ -83,7 +83,7 @@ def event():
                 flash("Mandatory fields should not be empty ")
                 return redirect(("/event?id="+id+"&report=False"))
 
-            if income_expenditure == 1 and not units:
+            if not units:
                 units = 1 
 
             #checks for data
@@ -103,7 +103,7 @@ def event():
                 db.execute("INSERT INTO budget_expenditure (project_id, type, item, amount, units, date) VALUES(?, ?, ?, ?, ?, ?)", int(id), _type, item, unit_price, units, date)
 
 
-            return redirect(("/event?id="+id)) 
+            return redirect(("/event?id="+id+"&report=False")) 
         
         elif request.form.get("button") == "delete":
             row_id = request.form.get("row_id")
@@ -132,17 +132,18 @@ def event():
             return redirect(("/event?id="+id+"&report=True"))
     else:
         _args = request.args
-        if not _args["id"]:
+        if not _args["id"] or not _args["report"]:
             return redirect("/")
         if _args["report"]  == "False":
             name = db.execute("SELECT name FROM events WHERE id=?",_args["id"])
             try:
                 os.remove(f'static/reports/{name[0]["name"]}.pdf')
-                report = False
+                report_l:bool = False
             except:
+                report_l:bool = False
                 pass
         elif _args["report"] == "True":
-            report = True
+            report_l:bool = True
         project = db.execute("SELECT * FROM events WHERE id=?", _args["id"])
         income_details = sorted(db.execute("SELECT * FROM budget_income WHERE project_id=?", int(_args["id"]) ), key=lambda x: x["date"])
         expenditure_details = sorted(db.execute("SELECT * FROM budget_expenditure WHERE project_id=?", int(_args["id"]) ), key=lambda x: x["date"])
@@ -152,27 +153,29 @@ def event():
             catagory.append(_["type"].lstrip().title())
         for _ in expenditure_details:
             catagory.append(_["type"].lstrip().title())
-        return render_template("event.html", project=project, catagory=set(catagory), income=income_details, expenditure=expenditure_details, report=report)
+        return render_template("event.html", project=project, catagory=set(catagory), income=income_details, report=report_l, expenditure=expenditure_details)
 
 @app.route("/login", methods=["POST","GET"])
 def login():
-    session.clear()
     if request.method == "POST":
         u_name_or_email = request.form.get("username_email")
         password = request.form.get("password")
 
         if not u_name_or_email or not password:
-            return redirect("/login")
+            flash("Empty Fields Not allowed")
+            return render_template("login.html")
         if "@" in u_name_or_email:
             row = db.execute("SELECT hash,id FROM users WHERE email=?", u_name_or_email)
         else:    
             row = db.execute("SELECT hash,id FROM users WHERE user_name=?", u_name_or_email)
 
         if len(row) != 1 or not check_password_hash(row[0]["hash"], password):
-            return redirect("/login")
+            flash("Something went wrong!")
+            return render_template("login.html")
         session["user_id"] = int(row[0]["id"])
         return redirect("/")
     else:
+        session.clear()
         return render_template("login.html")
 
 
@@ -188,11 +191,11 @@ def register():
         try:
             user = User(username, email, password, c_password, tp_no, info)
             db.execute("INSERT INTO users (user_name, email, hash, contact_no) VALUES(?, ?, ?, ?)", user.name, user.email, generate_password_hash(user.password), user.tp_no)
-        except:
-            raise
-        id = db.execute("SELECT id FROM users WHERE user_name=?", user.name)
-        print(id)
-        session["user_id"] = id[0]
+        except Exception as e:
+            flash(f"{str(e)}")
+            return render_template("register.html")
+        info = db.execute("SELECT id FROM users WHERE user_name=?", user.name)
+        session["user_id"] = info[0]['id']
         return redirect("/")
     else:
         session.clear()

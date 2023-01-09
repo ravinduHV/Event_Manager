@@ -6,9 +6,19 @@
 
 {% block head %}
     <link rel="stylesheet" href="static/style/login.css">
+    <link rel="stylesheet" href="static/style/event.css">
 {% endblock %}
 
 {% block main %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger" id="errors_in_form" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div id="middle">
         <form action="/login" method="POST">
             <div class="input-group flex-nowrap input">

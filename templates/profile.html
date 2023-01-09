@@ -5,17 +5,19 @@
 
 {% block head %}
     <link rel="stylesheet" href="static/style/profile.css">
+    <script src="static/script/delete_b.js"></script>
 {% endblock %}
 
 {% block main %}
     <div class="details">
         <div class="profile_pic">
             <div id="image_holder">
+                <img src="static/img/images.png" alt="">
 
             </div>
         </div>
         <div class="user_name">
-            <h3>{{ user[0]["user_name"].title() }} | {{ user[0]["email"] }} | {{ user[0]["contact_no"] }}</h3>
+            <h3>{{ user[0]["user_name"] }} | {{ user[0]["email"] }} | {{ user[0]["contact_no"] }}</h3>
         </div>
     </div>
     {% for catagory in catagories %}
@@ -33,10 +35,10 @@
                     </div>
                     <form action="/profile" method="post">
                         <input type="hidden" name="id" value='{{ project["id"] }}'> 
-                        <input class="btn btn-primary" name="name" type="submit" value="DEL">
+                        <input class="btn btn-primary delete" data-confirm='Are you sure to delete {{project["name"]}}?' name="name" type="submit" value="DEL">
                     </form>
                     <div class="submit" style="margin-top: 10px; margin-bottom: 10px;">
-                        <a href='/event?id={{ project["id"] }}' class="btn btn-primary">See More</a>
+                        <a href='/event?id={{ project["id"] }}&report=False' class="btn btn-primary" >See More</a>
                     </div>                   
                 </div>
             {% endif %}

@@ -63,6 +63,10 @@ class generate_pdf_report():
                 self._paper_size = "A3"
     
     def budget_report(self, id):
+        """REPORT GENERATING FUNCTION FOR BOTH LANDSCAPE AND PORTRAIT PAGES
+        Arguments:
+            id=:project_id in manager.db , events table
+        """
         details = db.execute("SELECT * FROM events WHERE id=?", id)
         income = sorted(db.execute("SELECT * FROM budget_income WHERE project_id=?",id), key=lambda x : x["date"])
         expends = sorted(db.execute("SELECT * FROM budget_expenditure WHERE project_id=?",id), key=lambda x : x["date"]) 

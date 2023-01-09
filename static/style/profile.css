@@ -53,3 +53,10 @@
     background-color: blanchedalmond;
 }
 
+#image_holder img{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(14, 7, 7, 0.411);
+}
