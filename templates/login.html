@@ -7,6 +7,7 @@
 {% block head %}
     <link rel="stylesheet" href="static/style/login.css">
     <link rel="stylesheet" href="static/style/event.css">
+    <script src="static/script/login.js"></script>
 {% endblock %}
 
 {% block main %}
@@ -22,13 +23,13 @@
     <div id="middle">
         <form action="/login" method="POST">
             <div class="input-group flex-nowrap input">
-                <input name="username_email" type="text" class="form-control" placeholder="Username or Email" aria-label="Username" aria-describedby="addon-wrapping auto" autocomplete="off">
+                <input name="username_email" type="text" class="form-control" id="username" placeholder="Username or Email" aria-label="Username" aria-describedby="addon-wrapping auto" autocomplete="off">
             </div>
             <div class="input-group flex-nowrap input">
-                <input name="password" type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="addon-wrapping" autocomplete="off">
+                <input name="password" type="password" class="form-control" id="password" placeholder="Password" aria-label="password" aria-describedby="addon-wrapping" autocomplete="off">
             </div>
             <div class="input">
-                <input class="btn btn-primary" type="submit" value="Login">
+                <input class="btn btn-primary" id="submit" type="submit" value="Login">
             </div>
         </form>
     </div>
